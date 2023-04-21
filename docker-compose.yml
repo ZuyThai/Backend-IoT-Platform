@@ -1,0 +1,29 @@
+version: "3"
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  server:
+    build:
+      dockerfile: Dockerfile
+    networks:
+        - my-net
+        - bridge
+    expose:
+      - 5000
+    environment:
+      - PORT=5000
+      - NODE_ENV=development
+    ports:
+      - 5000:5000
+  deploy:
+        resources:
+          limits:
+            cpus: 1
+            memory: 2G
+        reservations:
+            cpus: 1
+            memory: 2G
+    
