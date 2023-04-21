@@ -43,9 +43,6 @@ function isJson(String) {
 }
 //set up the message callbacks
 client.on("message", async function (topic, message) {
-  // logger.info(
-  //   `Received Topic: ${topic} - Recevied mesage: ${message.toString()}`
-  // );
   console.log("Received Topic: " + topic + "  Recevied mesage: " + message.toString());
   let tranfer = message.toString();
   if (isJson(tranfer)) {
@@ -127,7 +124,6 @@ exports.verifyGateway = async (req, res, next) => {
   }
 };
 async function delay(ms) {
-  // return await for better async stack trace support in case of errors.
   return await new Promise(resolve => setTimeout(resolve, ms));
 }
 exports.addDevice = async (req, res, next) => {
@@ -182,9 +178,7 @@ exports.verifyDevice = async (req, res, next) => {
         status: "fail"
       });
     }
-    //logger.info(`Delete gateway successfully", \"userId\": \"${req.body.userId}","gatewayId": "${gatewayId}`);
   } catch (error) {
-    //logger.error(`Delete gateway fail", \"userId\": \"${req.body.userId}\",\"ERROR\": \"${error}`);
     next(error);
   }
 };

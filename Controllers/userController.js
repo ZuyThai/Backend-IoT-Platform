@@ -6,7 +6,7 @@ exports.getProfile = async (req, res, next) => {
     const userId = req.body["userId"];
     const user = await User.findOne({ _id: userId }).select(
       "name email avatarurl"
-    ); //cloudinary_id')
+    );
     res.status(200).json({
       status: "success",
       data: { user },

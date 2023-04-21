@@ -31,7 +31,6 @@ exports.login = async (req, res, next) => {
     }
     
     if (bcrypt.compareSync(req.body.password, user.password)) {
-      // (mật khẩu nhập, mật khẩu đã hash)
       const token = jwt.sign(
         { userId: user._id },
         process.env.APP_SECRET,
@@ -45,7 +44,7 @@ exports.login = async (req, res, next) => {
           id: user._id,
           avatarUrl: user.avatarurl,
           role: user.role
-        } //,avatar: user.avatar , cloudinary_id: user.cloudinary_id}
+        }
       });
       logger.info(`Log-in successfully", \"userId\": \"${user._id}`);
     } else {
