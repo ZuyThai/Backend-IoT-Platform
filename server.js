@@ -5,13 +5,25 @@ const {route} = require("./Routers/listRoute");
 const { connectDB } = require('./database/dataBase');
 const cors = require("cors");
 const logger = require("./AppLog/logger")
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+const {mqttCallback} = require("./Controllers/mqttController")
+app.use(express.static(__dirname + "/view"))
+mqttCallback(io);
 require('dotenv').config()
 connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+io.on("connection", (socket) => {
+    console.log("Socket onnected");
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+});
 route(app);
 app.use('*', (err, req, res, next) => {
     const message = err.message || "Server is not respond";
@@ -29,6 +41,6 @@ app.use('*', (err, req, res, next) => {
     res.status(status).json({message});
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     logger.info(`server running at http://localhost:${port}/`);
 });
