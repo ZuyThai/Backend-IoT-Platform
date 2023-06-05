@@ -3,12 +3,12 @@ This is a Web application used to manage and control IoT devices.
 ## IoT system architecture
 ![iot_arch](https://github.com/ZuyThai/Backend-IoT-Platform/assets/114822142/a215d0b7-ef2b-4ffa-96c0-1bc2cd51e314)
 ## Device and Technologies used 
-Node: ESP8266
-Gateway: Raspberry Pi 3B+ or higher
-Local Broker: Mosquitto Broker install on Pi
-Data center: NodeJS + MongoDB
-Cloud Broker: HiveMQ (or AWS EC2 t2.micro)
-Client: ReactJS
+- Node: ESP8266 + Sensor
+- Gateway: Raspberry Pi 3B+ or higher
+- Local Broker: Mosquitto Broker install on Pi
+- Data center: NodeJS + MongoDB
+- Cloud Broker: HiveMQ (or AWS EC2 t2.micro)
+- Client: ReactJS
 ## Demo image
 ![Dashboard1](https://github.com/ZuyThai/Backend-IoT-Platform/assets/114822142/ef32d98c-b78a-43fd-9468-27e35797a911)
 ![Chart1](https://github.com/ZuyThai/Backend-IoT-Platform/assets/114822142/ff6510b0-150d-4077-ae53-e02c0176fe69)
