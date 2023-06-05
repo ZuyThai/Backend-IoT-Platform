@@ -17,15 +17,13 @@ Updating...
 ## Environment file
 ```Node
 APP_PORT = 
-APP_SECRET = Your JWT secret key
+APP_SECRET = "Your JWT secret key"
 SENDGRID_API_KEY = 
 APP_EMAIL = 
 DB_URI = 
-#DB_URI = "mongodb://127.0.0.1:27017/IoT-Platform"
 CLOUDINARY_CLOUD_NAME = 
 CLOUDINARY_API_KEY = 
 CLOUDINARY_API_SECRET =
-NODE_ENV=development
 ```
 
 
