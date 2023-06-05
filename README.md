@@ -15,7 +15,7 @@ Client: ReactJS
 ## Demo online
 Updating...
 ## Environment file
-```
+```Node
 APP_PORT = 
 APP_SECRET = Your JWT secret key
 SENDGRID_API_KEY = 
