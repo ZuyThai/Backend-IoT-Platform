@@ -1,3 +1,0 @@
-light:   9qd3ns6782h
-dht11:   a4ad9sj12bd
-gateway: 3der6478m3b

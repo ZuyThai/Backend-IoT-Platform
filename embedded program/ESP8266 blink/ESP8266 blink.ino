@@ -7,27 +7,18 @@
 #include <PubSubClient.h>
 #include <iostream>
 #include <string.h>
-#include <DHT.h>
-#define DHTPIN 14    // Chân dữ liệu của DHT 11 , với NodeMCU chân D5 GPIO là 14
-#define DHTTYPE DHT11 
-DHT dht(DHTPIN, DHTTYPE);
 boolean sendreq = false;
 WiFiClient client;
 HTTPClient http;
 PubSubClient mqtt_client(client);
-String requestUrl = "http://iot-platform-application-912380012.ap-southeast-1.elb.amazonaws.com/api/v1/device/verifydevice/a4ad9sj12bd";
-//String requestUrl = "http://192.168.30.100:5000/api/v1/device/verifydevice/a4ad9sj12bd";
+String requestUrl = "http://iot-platform-application-912380012.ap-southeast-1.elb.amazonaws.com/api/v1/device/verifydevice/123456";
+//String requestUrl = "http://192.168.30.100:5000/api/v1/device/verifydevice/9qd3ns6782h";
 //String gatewayip;
 String payload;
 String controltp;
-unsigned long lastMsg = 0;
-#define MSG_BUFFER_SIZE	(500)
-char msg[MSG_BUFFER_SIZE];
-char senddata[500];
-int value = 0;
+const char* lwt;
 char sendlwd[500];
 char sendlwc[500];
-const char* stream;
 void configModeCallback (WiFiManager *myWiFiManager)
 {
   Serial.println("Entered config mode");
@@ -40,10 +31,10 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(16, OUTPUT);
   digitalWrite(16, HIGH);
-  dht.begin();
+  digitalWrite(LED_BUILTIN, HIGH);
   //Khai báo wifiManager thuộc class WiFiManager, được quy định trong file WiFiManager.h
   WiFiManager wifiManager;
-  //có thểreset các cài đặt cũ bằng cách gọi hàm:
+  //có thể reset các cài đặt cũ bằng cách gọi hàm:
   //wifiManager.resetSettings();
   //Cài đặt callback, khi kết nối với wifi cũ thất bại, thiết bị sẽ gọi hàm callback
   //và khởi động chế độ AP với SSID được cài tự động là "ESP+chipID"
@@ -68,8 +59,27 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
     str[i]=(char)payload[i];
   }
-  str[i] = 0; // Null termination
+  str[i] = 0;
   Serial.println();
+  StaticJsonDocument <256> doc;
+  deserializeJson(doc,payload);
+  String mes = doc["message"];
+  String gpiostatus = doc["status"];
+  Serial.println(mes);
+  Serial.println(gpiostatus);
+  if(mes == "GPIO control"){
+    Serial.println("control");
+    if (gpiostatus == "high"){
+      digitalWrite(LED_BUILTIN, HIGH);
+      digitalWrite(16, HIGH);
+      Serial.println("LED OFF");
+    }
+    else{
+      digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(16, LOW);
+      Serial.println("LED ON");
+    }
+  }
 }
 void loop()
 {
@@ -93,21 +103,12 @@ void loop()
     JsonObject obj = doc.as<JsonObject>();
     String gatewayip = obj["gatewayip"];
     String controltopic = obj["controlTopic"];
-    String datastream = doc["datastream"];
+    String lastwill = obj["datastream"]; 
     const char* gwip = gatewayip.c_str();
     mqtt_client.setServer(gwip, 1883);
     const char* controltp = controltopic.c_str();
-    stream = datastream.c_str();
+    lwt = lastwill.c_str();
     mqtt_client.subscribe(controltp);
-    float t = dht.readTemperature();
-    dtostrf(t, 2, 2, msg);
-    //create json to publish
-    sprintf(senddata, "%s", ""); // Cleans the payload content  
-    sprintf(senddata, "%s {\"message\": %s", senddata, "\"send data\""); // Adds the contect
-    sprintf(senddata, "%s, \"value\": \"%s\"}", senddata, msg); // Adds value
-    mqtt_client.publish(stream, senddata);
-    Serial.println(senddata);
-    delay(5000);
     if (!mqtt_client.connected()) {
       reconnect();
     }
@@ -130,10 +131,10 @@ void reconnect() {
     sprintf(sendlwc, "%s {\"message\": %s", sendlwc, "\"Last will\""); // Adds the contect
     sprintf(sendlwc, "%s, \"value\": \"%s\"}", sendlwc, "Device Connected"); // Adds value
     // Attempt to connect
-    if (mqtt_client.connect(clientId.c_str(), stream, 0, false, sendlwd)) {
+    if (mqtt_client.connect(clientId.c_str(),lwt,0, false, sendlwd)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      mqtt_client.publish(stream, sendlwc);
+      mqtt_client.publish(lwt, sendlwc);
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqtt_client.state());
