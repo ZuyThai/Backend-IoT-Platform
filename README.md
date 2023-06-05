@@ -25,5 +25,10 @@ CLOUDINARY_CLOUD_NAME =
 CLOUDINARY_API_KEY = 
 CLOUDINARY_API_SECRET =
 ```
-
+## How to use
+At first startup, you must to setup .env file.
+Then, you just have to run
+```bash
+npm start
+```
 
