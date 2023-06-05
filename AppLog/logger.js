@@ -1,3 +1,4 @@
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const winston = require('winston')
 const S3StreamLogger = require('s3-streamlogger').S3StreamLogger;
 const timezoned = () => {

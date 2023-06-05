@@ -31,4 +31,5 @@ Then, you just have to run
 ```bash
 npm start
 ```
-
+Make sure your application runs successfully, you will see three lines of message:
+![Capture](https://github.com/ZuyThai/Backend-IoT-Platform/assets/114822142/e2a3dc51-24e4-40eb-a9fa-98b1a01a8335)
