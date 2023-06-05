@@ -6,8 +6,8 @@ const Gateway = require("../models/Gateway");
 const Device = require("../models/Device")
 require('dotenv').config()
 var options = {
-  host: '865d0b2920144dd19ad53dd45daa0c57.s1.eu.hivemq.cloud',
-  port: 8883,
+  host: process.env.MQTT_HOST,
+  port: process.env.MQTT_PORT,
   protocol: 'mqtts',
   username: process.env.MQTT_USERNAME,
   password: process.env.MQTT_PASSWORD
@@ -42,35 +42,6 @@ function isJson(String) {
   }
   return true;
 }
-//set up the message callbacks
-// client.on("message", async function (topic, message) {
-//   console.log("Received Topic: " + topic + "  Recevied mesage: " + message.toString());
-//   let tranfer = message.toString();
-//   if (isJson(tranfer)) {
-//     let obj = JSON.parse(tranfer);
-//     // If add device success
-//     if (obj.message == "Add success") {
-//       await Device.findOneAndUpdate({_id:obj.id},{gatewayack:true})
-//       console.log(obj.id,obj.message,"add device success")
-//     }
-//     else if (obj.message == "gwConnected") {
-//       await Gateway.findOneAndUpdate({_id:obj.id},{connectstatus:"Connected"})
-//     }
-//     // If gateway disconnect
-//     else if (obj.message == "GATEWAY DISCONNECTION"){
-//       await Gateway.findOneAndUpdate({_id:obj.id},{connectstatus: "Disconnected"})
-//     }
-//     else if (obj.message == "send data"){
-//       await Telemetry.create({ deviceId: topic, value: obj.value });
-//     }
-//     else if (obj.message == "dvDisconnect"){
-//       await Device.findOneAndUpdate({ _id: topic}, { connectstatus: "Disconnected" });
-//     }
-//     else if (obj.message == "dvConnect"){
-//       await Device.findOneAndUpdate({ _id: topic}, { connectstatus: "Connected" });
-//     }
-//   }
-// });
 exports.mqttCallback = (io) => {
   client.on("message", async function (topic, message) {
     console.log("Received Topic: " + topic + "  Recevied mesage: " + message.toString());
