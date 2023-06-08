@@ -29,8 +29,7 @@ exports.login = async (req, res, next) => {
       const err = { message: "Email or password is not correct", status: 400 };
       next(err);
     }
-    
-    if (bcrypt.compareSync(req.body.password, user.password)) {
+    else if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = jwt.sign(
         { userId: user._id },
         process.env.APP_SECRET,
